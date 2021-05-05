@@ -1,0 +1,57 @@
+<div class="rows">
+  <h1>Lista de Tarefas</h1>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <td>
+        <button type="button" class="btn btn-primary" (click)="showModalInsert()">Nova Tarefa</button>
+      </td>
+      <td colspan="6">
+        <task-search-form (onSearch)="search($event)"></task-search-form>
+      </td>
+    </tr>
+    <tr>
+      <th style="width: 15%">ID</th>
+      <th style="width: 25%">Nome</th>
+      <th style="width: 15%">Situação</th>
+      <th style="width: 20%">Criado em</th>
+      <th style="width: 20%">Atualizado em</th>
+      <th style="width: 13%">Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let task of tasks">
+      <td>{{task.id}}</td>
+      <td>
+        <ng-container *ngIf="task.completed">
+          <s>{{task.name}}</s>
+        </ng-container>
+        <ng-container *ngIf="!task.completed">
+          {{task.name}}
+        </ng-container>
+      </td>
+      <td>
+        <ng-container *ngIf="task.completed">
+          <span class="badge badge-success">Finalizada</span>
+        </ng-container>
+        <ng-container *ngIf="!task.completed">
+          <span class="badge badge-warning">Pendente</span>
+        </ng-container>
+      </td>
+      <td>{{task.created_at.date | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+      <td>{{task.updated_at.date | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+      <td>
+          <a href="javascrip:void(0)" (click)="showModalEdit(task.id)">
+            <i class="fas fa-edit"></i>
+          </a> |
+          <a href="javascrip:void(0)" (click)="showModalDelete(task.id)">
+            <i class="fas fa-trash-alt"></i>
+          </a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<task-new-modal (onSuccess)="onInsertSuccess($event)" (onError)="onInsertError($event)"></task-new-modal>
+<task-edit-modal [taskId]="taskId" (onSuccess)="onEditSuccess($event)" (onError)="onEditError($event)"></task-edit-modal>
+<task-delete-modal [taskId]="taskId" (onSuccess)="onDeleteSuccess($event)" (onError)="onDeleteError($event)"></task-delete-modal>

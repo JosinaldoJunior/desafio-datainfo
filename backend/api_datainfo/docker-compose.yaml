@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  laravel-app:
+      build: .
+      hostname: api-datainfo
+      ports:
+        - "8080:80"
+      volumes:
+        - ./:/usr/share/nginx
