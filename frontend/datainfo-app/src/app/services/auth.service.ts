@@ -6,7 +6,7 @@ import {User} from "../model";
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {environment} from "../../environments/environment";
 
-const TOKEY_KEY = 'agenda_token';
+const TOKEY_KEY = 'datainfo_token';
 
 @Injectable({
   providedIn: 'root'

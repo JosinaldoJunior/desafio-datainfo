@@ -26,7 +26,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' }, //Define page default
 ];
 
-function jwtfactory(authService: AuthService) {
+export function jwtfactory(authService: AuthService) {
     return {
         whitelistedDomains: [
             new RegExp('localhost:8000/*'),
