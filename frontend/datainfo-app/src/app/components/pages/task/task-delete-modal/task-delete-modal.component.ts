@@ -3,6 +3,7 @@ import {ModalComponent} from "../../../bootstrap/modal/modal.component";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {AuthService} from "../../../../services/auth.service";
 import {environment} from "../../../../../environments/environment";
+import {TaskHttpService} from "../../../../services/http/task-http.service";
 
 @Component({
   selector: 'task-delete-modal',
@@ -20,7 +21,8 @@ export class TaskDeleteModalComponent implements OnInit {
   @Output() onSuccess: EventEmitter<any> = new EventEmitter<any>();
   @Output() onError: EventEmitter<HttpErrorResponse> = new EventEmitter<HttpErrorResponse>();
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient,
+              private taskHttpService: TaskHttpService) { }
 
   ngOnInit() {
   }
@@ -35,8 +37,7 @@ export class TaskDeleteModalComponent implements OnInit {
   }
 
   destroy(){
-    this.http
-      .delete(`${environment.api.url}/todo-lists/${this._taskId}`)
+    this.taskHttpService.destroy(this._taskId)
       .subscribe((task) => {
         this.onSuccess.emit(task);
         this.modal.hide();
@@ -48,6 +49,7 @@ export class TaskDeleteModalComponent implements OnInit {
   }
 
   hideModal($event: Event) {
+    // tslint:disable-next-line:comment-format
     //fazer algo quando o modal for fechado
     console.log($event);
   }

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/pages/login/login.component';
-import { FormsModule } from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
 import { HttpClientModule } from "@angular/common/http";
 import { TaskListComponent } from './components/pages/task/task-list/task-list.component';
@@ -18,6 +18,8 @@ import { NavbarComponent } from './components/bootstrap/navbar/navbar.component'
 import {AuthGuard} from "./guards/auth.guard";
 import { TaskSearchFormComponent } from './components/pages/task/task-search-form/task-search-form.component';
 import { UserNewModalComponent } from './components/pages/user/user-new-modal/user-new-modal.component';
+import {CardErrorComponent} from "./components/bootstrap/card-error/card-error.component";
+import {ListErrorComponent} from "./components/bootstrap/list-error/list-error.component";
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -50,21 +52,24 @@ export function jwtfactory(authService: AuthService) {
     TaskDeleteModalComponent,
     NavbarComponent,
     TaskSearchFormComponent,
-    UserNewModalComponent
+    UserNewModalComponent,
+    CardErrorComponent,
+    ListErrorComponent
   ],
-    imports: [
-        BrowserModule,
-        FormsModule,
-        HttpClientModule,
-        RouterModule.forRoot(routes, {enableTracing: true}),
-        JwtModule.forRoot({
-            jwtOptionsProvider: {
-                provide: JWT_OPTIONS,
-                useFactory: jwtfactory,
-                deps: [AuthService]
-            }
-        })
-    ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpClientModule,
+    RouterModule.forRoot(routes, {enableTracing: true}),
+    JwtModule.forRoot({
+      jwtOptionsProvider: {
+        provide: JWT_OPTIONS,
+        useFactory: jwtfactory,
+        deps: [AuthService]
+      }
+    }),
+    ReactiveFormsModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

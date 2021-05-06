@@ -2,14 +2,17 @@
   <modal (onHide)="hideModal($event)">
      <h5 modal-title>Nova tarefa</h5>
      <div modal-body>
-        <div class="form-group">
+       <card-error *ngIf="showError()">
+         <list-error [errors]="errors"></list-error>
+       </card-error>
+        <div class="form-group" [formGroup]="form">
           <label for="name">Nome</label>
-          <input type="text" class="form-control" name="name" id="name" required [(ngModel)]="task.name">
+          <input type="text" class="form-control" name="name" id="name" required formControlName="name">
         </div>
      </div>
      <div modal-footer>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-        <button type="submit" class="btn btn-primary">Incluir</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Incluir</button>
      </div>
   </modal>
 </form>

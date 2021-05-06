@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "buildhml": "ng build --configuration=homolog"
+    "buildhomol": "ng build --configuration=homol"
   },
   "private": true,
   "dependencies": {

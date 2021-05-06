@@ -3,6 +3,8 @@ import {ModalComponent} from "../../../bootstrap/modal/modal.component";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {AuthService} from "../../../../services/auth.service";
 import {environment} from "../../../../../environments/environment";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {TaskHttpService} from "../../../../services/http/task-http.service";
 
 @Component({
   selector: 'task-edit-modal',
@@ -11,10 +13,8 @@ import {environment} from "../../../../../environments/environment";
 })
 export class TaskEditModalComponent implements OnInit {
 
-  task = {
-    'name': '',
-    'completed': '',
-  };
+  form: FormGroup;
+  errors = {};
 
   _taskId: number;
 
@@ -23,7 +23,16 @@ export class TaskEditModalComponent implements OnInit {
   @Output() onSuccess: EventEmitter<any> = new EventEmitter<any>();
   @Output() onError: EventEmitter<HttpErrorResponse> = new EventEmitter<HttpErrorResponse>();
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient,
+              private authService: AuthService,
+              private taskHttpService: TaskHttpService,
+              private formBuilder: FormBuilder) {
+    this.form = this.formBuilder.group({
+      'name': ['', [Validators.required]],
+      'completed': false,
+      'user_id': authService.me.id
+    });
+  }
 
   ngOnInit() {
   }
@@ -32,21 +41,29 @@ export class TaskEditModalComponent implements OnInit {
   set taskId(value) {
       this._taskId = value;
       if(this._taskId) {
-          this.http.get<{data: any}>(`${environment.api.url}/todo-lists/${value}`)
-              .subscribe((response) => {
-                this.task = response.data;
-              });
+          this.taskHttpService.get(this._taskId)
+            .subscribe(
+          task => this.form.patchValue(task),
+          responseError => {
+                  if (responseError.status == 401){
+                    this.modal.hide();
+                  }
+            });
       }
   }
 
   submit() {
-      // const token = window.localStorage.getItem('token');
-      this.http
-          .put(`${environment.api.url}/todo-lists/${this._taskId}`, this.task)
+      this.taskHttpService
+          .update(this._taskId, this.form.value)
           .subscribe((task) => {
-              this.onSuccess.emit(task)
+              this.onSuccess.emit(task);
               this.modal.hide();
-          }, error => this.onError.emit(error));
+          }, error => {
+            if(error.status === 422) {
+              this.errors = error.error.errors;
+            }
+            this.onError.emit(error);
+          });
   }
 
   showModal() {
@@ -55,6 +72,10 @@ export class TaskEditModalComponent implements OnInit {
 
   hideModal($event: Event) {
       console.log($event);
+  }
+
+  showError(){
+    return Object.keys(this.errors).length != 0;
   }
 
 }

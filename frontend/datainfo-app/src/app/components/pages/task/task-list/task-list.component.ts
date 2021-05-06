@@ -6,6 +6,8 @@ import {TaskDeleteModalComponent} from "../task-delete-modal/task-delete-modal.c
 import {AuthService} from "../../../../services/auth.service";
 import {NotifyMessageService} from "../../../../services/notify-message.service";
 import {environment} from "../../../../../environments/environment";
+import {TaskHttpService} from "../../../../services/http/task-http.service";
+import {Task} from "../../../../model";
 
 declare let $;
 
@@ -16,7 +18,7 @@ declare let $;
 })
 export class TaskListComponent implements OnInit {
 
-  tasks: Array<{ id: number; name: string; completed: boolean; created_at: { date: string }, updated_at: { date: string } }>;
+  tasks: Array<Task>;
 
   @ViewChild(TaskNewModalComponent)
   taskNewModal: TaskNewModalComponent;
@@ -31,8 +33,10 @@ export class TaskListComponent implements OnInit {
   searchText: string;
 
   // tslint:disable-next-line:max-line-length
-  constructor(private http: HttpClient, private authService: AuthService, private notifyMessage: NotifyMessageService) {
-
+  constructor(private http: HttpClient,
+              private authService: AuthService,
+              private notifyMessage: NotifyMessageService,
+              private taskHttpService: TaskHttpService) {
   }
 
   ngOnInit() {
@@ -41,10 +45,11 @@ export class TaskListComponent implements OnInit {
 
   getTasks() {
       const strSearch = this.searchText ? `&search=${this.searchText}` : '';
-    // tslint:disable-next-line:max-line-length
-      this.http.get<{data: Array<{id: number, name: string, completed: boolean; created_at: { date: string }, updated_at: { date: string }}>}>
-        // tslint:disable-next-line:max-line-length
-        (`${environment.api.url}/todo-lists?userId=${this.authService.me.id}${strSearch}`).subscribe(response => this.tasks = response.data);
+      this.taskHttpService
+        .list(strSearch, this.authService.me.id)
+        .subscribe(response => {
+           this.tasks = response.data;
+        });
   }
 
   showModalInsert(){
