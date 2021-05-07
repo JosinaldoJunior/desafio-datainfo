@@ -1,10 +1,28 @@
 version: '3'
 
 services:
-  laravel-app:
-      build: .
-      hostname: api-datainfo
-      ports:
-        - "8080:80"
-      volumes:
-        - ./:/usr/share/nginx
+    laravel-api:
+        build: .
+        hostname: api-datainfo
+        ports:
+            - "8080:80"
+        volumes:
+            - ./:/usr/share/nginx
+        networks:
+            - app-network
+
+    mysql-app:
+        image: mysql:5.7.22
+        command: --innodb-use-native-aio=0
+        ports:
+            - "3306:3306"
+        volumes:
+            - .docker/dbdata:/var/lib/mysql
+        environment:
+            MYSQL_DATABASE: todo_list
+            MYSQL_ROOT_PASSWORD:
+        networks:
+            - app-network
+networks:
+    app-network:
+        driver: bridge
