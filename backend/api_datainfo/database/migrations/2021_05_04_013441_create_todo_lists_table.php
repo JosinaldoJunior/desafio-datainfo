@@ -15,8 +15,7 @@ class CreateTodoListsTable extends Migration
     {
         Schema::create('todo_lists', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-//            $table->string('completed')->default(false);
+            $table->string('name', 255);
             $table->boolean('completed')->default(0);
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');

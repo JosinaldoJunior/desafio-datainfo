@@ -12,8 +12,7 @@ class TodoListFilter extends SimpleQueryFilter
 
     protected function applySearch($value)
     {
-        $this->query->where('name', 'LIKE', "%$value%")
-                    /*->orWhere('email', 'LIKE', "%$value%")*/;
+        $this->query->where('name', 'LIKE', "%$value%");
     }
 
     protected function applyUserId($value)

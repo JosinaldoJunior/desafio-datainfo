@@ -25,18 +25,18 @@ class CorsMiddleware
             $allowOrigin = $requestOrigin;
         }
 
-        if($request->is('api/*')){
+//        if($request->is('api/*')){
 //            if(isset($allowOrigin)){
 //                header("Access-Control-Allow-Origin: $allowOrigin");
 //            }
 
-            header("Access-Control-Allow-Origin: *");
+            header("Access-Control-Allow-Origin: http://192.168.99.100:8081");
 
 
             header('Access-Control-Allow-Headers: Content-Type, Authorization');
             header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE');
             header('Access-Control-Expose-Headers: Authorization');
-        }
+//        }
         return $next($request);
     }
 }

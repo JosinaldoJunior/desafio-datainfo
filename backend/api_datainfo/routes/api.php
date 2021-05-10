@@ -17,13 +17,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('teste', function (){
+   return 'teste';
+});
+
 Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::name('login')->post('login', 'AuthController@login');
     Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);
     Route::name('logout')->post('logout', 'AuthController@logout');
 
-    Route::group(['middleware' => 'auth:api'], function () {
+    #Route::group(['middleware' => 'auth:api'], function () {
         Route::name('me')->get('me', 'AuthController@me');
         Route::resource('todo-lists', 'TodoListController', ['except' => ['create', 'edit']]);
-    });
+    #});
 });

@@ -23,7 +23,7 @@ class AuthController extends Controller
 
     public function logout()
     {
-        \Auth::guard('api')->logout();
+        #\Auth::guard('api')->logout();
         return response()->json([], 204);
     }
 
