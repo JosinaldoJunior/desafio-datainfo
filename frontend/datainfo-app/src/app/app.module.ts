@@ -32,6 +32,7 @@ export function jwtfactory(authService: AuthService) {
     return {
         whitelistedDomains: [
             new RegExp('localhost:8000/*'),
+            new RegExp('localhost:8080/*'),
             new RegExp('http://192.168.99.100:8080/*'),
         ],
         tokenGetter: () => {
@@ -40,6 +41,7 @@ export function jwtfactory(authService: AuthService) {
     };
 }
 
+// @ts-ignore
 @NgModule({
   declarations: [
     AppComponent,
@@ -65,7 +67,9 @@ export function jwtfactory(authService: AuthService) {
       jwtOptionsProvider: {
         provide: JWT_OPTIONS,
         useFactory: jwtfactory,
-        deps: [AuthService]
+        deps: [AuthService],
+        // @ts-ignore
+        throwNoTokenError: true
       }
     }),
     ReactiveFormsModule

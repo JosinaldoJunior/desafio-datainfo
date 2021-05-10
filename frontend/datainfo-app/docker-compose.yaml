@@ -1,0 +1,9 @@
+version: '2.1'
+
+services:
+  app-angular:
+        build: .
+        hostname: app-angular
+        container_name: app-angular
+        ports:
+            - "8081:80"

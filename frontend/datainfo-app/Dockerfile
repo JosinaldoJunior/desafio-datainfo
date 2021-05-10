@@ -10,6 +10,5 @@ FROM nginx:alpine
 VOLUME /var/cache/nginx
 COPY --from=angular app/dist/datainfo-app /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-RUN sudo apt-get install nginx-extras
 
 # docker build -t .
